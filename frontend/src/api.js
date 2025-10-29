@@ -1,22 +1,29 @@
 import axios from 'axios';
 
+// Ensure this URL is your LIVE Render URL!
+const API_BASE_URL = 'https://fullstack-tgaa.onrender.com';
 
-export const API_BASE_URL = 'https://fullstack-tgaa.onrender.com'; 
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-});
-
-// Function to fetch the list of items from your FastAPI backend
+// 1. GET (Read all items)
 export const getItems = async () => {
-  try {
-    // Assuming your FastAPI endpoint for reading items is located at /items
-    const response = await api.get('/items'); 
-    return response.data;
-  } catch (error) {
-    // Log the detailed error (this is where CORS errors will appear)
-    console.error("Error fetching items:", error);
-    // Return an empty array on failure
-    return []; 
-  }
+    try {
+        const response = await axios.get(`${API_BASE_URL}/items`);
+        // We know this part works because of your previous test!
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching items:", error);
+        throw error;
+    }
+};
+
+// 2. POST (Create a new item)
+// itemData should be an object like: { title: "New Item", description: "Details" }
+export const createItem = async (itemData) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/items`, itemData);
+        // The backend returns the created item or a success message
+        return response.data;
+    } catch (error) {
+        console.error("Error creating item:", error);
+        throw error;
+    }
 };
