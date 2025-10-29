@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getItems, createItem } from './api'; // Import your API functions
-import './App.css'; // Your existing CSS file
+import './App.css'; // Your CSS file (now contains Tailwind directives)
 
 function App() {
   // State to hold the list of items fetched from the API
@@ -22,6 +22,8 @@ function App() {
       setItems(data);
       setError(null);
     } catch (err) {
+      // NOTE: Using console.error here to capture the full error details
+      console.error("API Fetch Error:", err);
       setError("Failed to fetch data from the API. Check the console for details.");
       setItems([]); // Clear items on error
     } finally {
@@ -57,52 +59,70 @@ function App() {
       // After successfully creating an item, refresh the list:
       await fetchItems(); 
     } catch (err) {
+      console.error("API Create Error:", err);
       alert("Failed to create item. Check the console for API error details.");
     }
   };
 
-  // --- JSX RENDER LOGIC ---
-  if (loading) return <h1>Loading Items...</h1>;
-  if (error) return <h1 style={{ color: 'red' }}>Error: {error}</h1>;
+  // --- JSX RENDER LOGIC (MODERNIZED WITH TAILWIND) ---
+  if (loading) return <h1 className="text-2xl font-bold text-blue-600 mt-10 p-4">Loading Items...</h1>;
+  if (error) return <h1 className="text-2xl font-bold text-red-600 mt-10 p-4">Error: {error}</h1>;
 
   return (
-    <div className="app-container">
-      <h1>My Fullstack Todo List</h1>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8 font-sans"> 
+      <div className="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-2xl">
+        
+        <header className="mb-8 border-b pb-4">
+          <h1 className="text-4xl font-extrabold text-gray-900">Modern Todo List</h1>
+          <p className="text-gray-500 mt-1">Tasks synced live with your Render Backend!</p>
+        </header>
 
-      {/* 1. NEW ITEM FORM */}
-      <form onSubmit={handleSubmit} className="item-form">
-        <input
-          type="text"
-          placeholder="New Item Title (Required)"
-          value={newItemTitle}
-          onChange={(e) => setNewItemTitle(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="Description (Optional)"
-          value={newItemDescription}
-          onChange={(e) => setNewItemDescription(e.target.value)}
-        />
-        <button type="submit">Add Item</button>
-      </form>
+        {/* 1. NEW ITEM FORM (Modernized) */}
+        <form onSubmit={handleSubmit} className="space-y-4 mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
+          <input
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+            type="text"
+            placeholder="Task Title (e.g., Finish Deployment)"
+            value={newItemTitle}
+            onChange={(e) => setNewItemTitle(e.target.value)}
+            required
+          />
+          <textarea
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 resize-none"
+            placeholder="Detailed description (Optional)"
+            value={newItemDescription}
+            onChange={(e) => setNewItemDescription(e.target.value)}
+          />
+          <button 
+            type="submit" 
+            className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-200"
+          >
+            Add New Task
+          </button>
+        </form>
 
-      <hr />
+        <hr className="my-6 border-gray-200" />
 
-      {/* 2. LIST DISPLAY */}
-      <h2>{items.length} Items Found:</h2>
-      {items.length === 0 ? (
-        <p>No items in the database yet. Add one above!</p>
-      ) : (
-        <ul className="item-list">
-          {items.map((item, index) => (
-            <li key={item.id || index} className="item-card">
-              <h3>{item.title}</h3>
-              <p>{item.description || 'No description provided.'}</p>
-              {/* Note: The key should be item.id when your database provides real IDs */}
-            </li>
-          ))}
-        </ul>
-      )}
+        {/* 2. LIST DISPLAY (Modern Card Style) */}
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">{items.length} Items Found:</h2>
+        {items.length === 0 ? (
+          <p className="text-center text-gray-500 p-10 border border-dashed rounded-lg">
+                No items in the database yet. Add one above!
+            </p>
+        ) : (
+          <ul className="space-y-4">
+            {items.map((item, index) => (
+              <li key={item.id || index} className="p-4 bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+                <h3 className="text-xl font-bold text-gray-800 mb-1">{item.title}</h3>
+                <p className="text-gray-600 italic">
+                        {item.description || 'No description provided.'}
+                    </p>
+                {/* Future: Add 'Delete' button here */}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
