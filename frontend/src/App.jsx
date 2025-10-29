@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 // Import the API function
-import { getItems } from './api'; 
+import { getItems, API_BASE_URL } from './api'; 
 
 import './App.css'; 
 
