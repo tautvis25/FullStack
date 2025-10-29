@@ -9,7 +9,7 @@ app = FastAPI()
 # This is the critical part that must allow your frontend's local address
 origins = [
     "http://localhost:5173",  # Your local React Dev Server
-    "https://web-umber.vercel.app/"
+    "https://web-umber.vercel.app"
 ]
 
 app.add_middleware(
