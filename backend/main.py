@@ -9,7 +9,7 @@ app = FastAPI(
 )
 
 origins = [
-    "http://localhost:5173",          # For local testing
+    "http://localhost:5173",          # For local testing1
     #"https://YOUR_VERCEL_URL.vercel.app" 
 ]
 
